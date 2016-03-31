@@ -1,6 +1,5 @@
 <?php /*
 	Template Name:  Campaign - Thanks Page
-
 */ 
  get_header('campaign-save-tax'); ?>
         
@@ -21,10 +20,8 @@
                         <li>FundsWinner of Super Achievement Award from IFFCO-Tokio General Insurance</li>
                     </ul>
                 </div>
-
             </div>
         </div>
-
 <!-- Google Code for Form Fill Ups Conversion Page -->
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -43,5 +40,4 @@ var google_remarketing_only = false;
 <img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/924130031/?label=JsuECPSe2mQQ77XUuAM&amp;guid=ON&amp;script=0"/>
 </div>
 </noscript>
-
     <?php get_footer('thank-you'); ?>

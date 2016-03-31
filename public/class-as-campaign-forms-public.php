@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The public-facing functionality of the plugin.
  *
@@ -9,7 +8,6 @@
  * @package    As_Campaign_Forms
  * @subpackage As_Campaign_Forms/public
  */
-
 /**
  * The public-facing functionality of the plugin.
  *
@@ -21,9 +19,7 @@
  * @author     Anurag Singh <anuragsinghce@gmail.com>
  */
 class As_Campaign_Forms_Public {
-
 	var $hasError;
-
 	/**
 	 * The ID of this plugin.
 	 *
@@ -32,7 +28,6 @@ class As_Campaign_Forms_Public {
 	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
 	private $plugin_name;
-
 	/**
 	 * The version of this plugin.
 	 *
@@ -41,7 +36,6 @@ class As_Campaign_Forms_Public {
 	 * @var      string    $version    The current version of this plugin.
 	 */
 	private $version;
-
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -50,19 +44,15 @@ class As_Campaign_Forms_Public {
 	 * @param      string    $version    The version of this plugin.
 	 */
 	public function __construct( $plugin_name, $version ) {
-
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
 	}
-
 	/**
 	 * Register the stylesheets for the public-facing side of the site.
 	 *
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
-
 		/**
 		 * This function is provided for demonstration purposes only.
 		 *
@@ -74,18 +64,14 @@ class As_Campaign_Forms_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/as-campaign-forms-public.css', array(), $this->version, 'all' );
-
 	}
-
 	/**
 	 * Register the JavaScript for the public-facing side of the site.
 	 *
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-
 		/**
 		 * This function is provided for demonstration purposes only.
 		 *
@@ -97,18 +83,12 @@ class As_Campaign_Forms_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/as-campaign-forms-public.js', array( 'jquery' ), $this->version, false );
-
 		wp_enqueue_script( $this->plugin_name.'_jquery_validate', plugin_dir_url(__FILE__) . 'js/jquery.validate.min.js', array('jquery'), $this->version, true);
-
         wp_enqueue_script( $this->plugin_name.'_validation_rules', plugin_dir_url(__FILE__) . 'js/validation-rules.js', array('jquery'), $this->version, true);
-
         wp_enqueue_script( $this->plugin_name.'_jquery_lightbox', plugin_dir_url(__FILE__) . 'js/jquery.fancybox.js', array('jquery'), $this->version, true);
         //wp_enqueue_script($this->as_campaign, plugin_dir_url(__FILE__) .'as-campaign/public/js/as-campaign.js'));
-
 	}
-
 	/**
 	 * Registers all shortcodes at once
 	 *
@@ -119,8 +99,6 @@ class As_Campaign_Forms_Public {
 		add_shortcode( 'display_campaign_form', array( $this, 'handleSignupForm' ) );
 		//add_shortcode( 'nowhiring-howtoapply', array( $this, 'how_to_apply' ) );
 	} // register_shortcodes()
-
-
 	/**
      * Override wordpress default template
      *
@@ -131,25 +109,18 @@ class As_Campaign_Forms_Public {
         if ( is_page('campaign-mutual-funds') ) {
             $template = plugin_dir_path( __FILE__ ) .'/partials/page-campaign-mutual-fund.php';
         }
-
         if( is_page('campaign-tax-saving-mutual-funds')) {
             $template = plugin_dir_path(__FILE__) . '/partials/page-campaign-save-tax.php';
         }
         if( is_page('campaign-free-demat')) {
             $template = plugin_dir_path(__FILE__) . '/partials/page-campaign-free-demat.php';
         }
-
         if( is_page('campaign-thank-you')) {
         	$template = plugin_dir_path(__FILE__) . '/partials/page-campaign-thank-you.php';
         }
         return $template;
     }
-
-
-
-
 	function handleSignupForm() {
-
         //if(('page-campaign.php')) {
         if ( is_page_template( 'page-templates/page-campaign-free-demat.php' )  ) {
             if($this->isFormSubmitted() && $this->isNonceSet()) {
@@ -163,13 +134,11 @@ class As_Campaign_Forms_Public {
                 $this->displayfreedematForm();
             }
         }
-
         elseif ( is_page('campaign-mutual-funds')  ) {
             if($this->isFormSubmitted() && $this->isNonceSet()) {
                 if($this->isFormValid()) {
-                	//$this->redirect_to_thank_you();
                     $this->createPost();
-                    $this->displaymutualfundForm();
+                    //$this->displaymutualfundForm();
                 } else {
                     $this->displaymutualfundForm();
                 }
@@ -177,7 +146,6 @@ class As_Campaign_Forms_Public {
                 $this->displaymutualfundForm();
             }
         }
-
         elseif ( is_page_template( 'page-templates/page-campaign-save-tax.php' ) ) {
             if($this->isFormSubmitted() && $this->isNonceSet()) {
                 if($this->isFormValid()) {
@@ -190,7 +158,6 @@ class As_Campaign_Forms_Public {
                 $this->displayTaxSavingForm();
             }
         }
-
         // Load when no condition is true
         else {
             if($this->isFormSubmitted() && $this->isNonceSet()) {
@@ -205,18 +172,15 @@ class As_Campaign_Forms_Public {
             }
         }
     }
-
     function isFormSubmitted() {
         if( isset( $_POST['submitForm'] ) ) return true;
         else return false;
     }
-
     function isNonceSet() {
         if( isset( $_POST['nonce_field_for_front_end_new_post'] )  &&
             wp_verify_nonce( $_POST['nonce_field_for_front_end_new_post'], 'front_end_new_post' ) ) return true;
         else return false;
     }
-
     function isFormValid() {
         //Check all mandatory fields are present.
         if ( trim( $_POST['postTitle'] ) === '' ) {
@@ -238,13 +202,19 @@ class As_Campaign_Forms_Public {
         }
         return true;
     }
-
     
-function growtheme_mailchimp_signup() {
-    // Submit the Form
-    wp_redirect( home_url( ) ); exit;
-}
+	
+	private function redirect_to_thank_you_page() {
+		$location = home_url("campaign-thank-you");
+        ?>
+	   <script type="text/javascript">
+	   <!--
+	      window.location= <?php echo "'" . $location . "'"; ?>;
+	   //-->
+	   </script>
+	<?php
 
+	}
 
     function createPost() {
         //Get the details from the form which was posted
@@ -256,8 +226,6 @@ function growtheme_mailchimp_signup() {
         $signupRefererralUrl = $_POST['signupRefererralUrl'];
         $campaignId = $_POST['campaignId'];
         $postSatus = 'publish'; //  in case you want to manually approve all posts;
-
-
         //Create the post in WordPress
         $post_id = wp_insert_post( array(
             'post_type'            => 'signup',
@@ -271,25 +239,15 @@ function growtheme_mailchimp_signup() {
         update_post_meta($post_id,'as_signup_form_mobile_no', $mobileNo, true);
         update_post_meta($post_id,'as_signup_form_email', $emailId, true);
         update_post_meta($post_id,'as_signup_form_campaign_id', $campaignId, true);
-
-        //wp_redirect( home_url( "successfully-form-submission" ) ); exit;
-        // wp_redirect( home_url() ); exit;
-        //wp_redirect( get_permalink( $post->ID )); exit;
-
-
-        // $setupEmail = New As_Email();
-        // $setupEmail->send_email();
-
-        // $setupSms = New As_SMS();
+        
+        $setupEmail = New As_Email();
+        $setupEmail->send_email();
+        $setupSms = New As_SMS();
         //$setupSms->send_sms();
-
-       // wp_redirect( home_url( "campaign-thank-you" ) ); exit;
-        add_action ('wp_loaded', 'growtheme_mailchimp_signup');
-
+      
+        $this->redirect_to_thank_you_page();
     }
-
     // public function form_success() {
-
         // if (createPost()) {
         //     alert ("hi");
         // }
@@ -297,12 +255,8 @@ function growtheme_mailchimp_signup() {
         //     alert("bye");
         // }
     // }
-
-
-
-
     //This function displays the HTML form.
-    public function displayfreedematForm() {     ?>
+    public function displayfreedematForm() {?>
         <form class="sinup-frm" action="" id="formpost" method="POST" enctype="multipart/form-data">
             <div class="int-fld">
                 <label for="postTitle">Name</label>
@@ -336,8 +290,7 @@ function growtheme_mailchimp_signup() {
         </form>
     <?php
     }
-
-    public function displaymutualfundForm() {     ?>
+    public function displaymutualfundForm() {?>
         <form class="sinup-frm" action="" id="formpost" method="POST" enctype="multipart/form-data">
             <div class="int-fld">
                 <label for="postTitle">Name</label>
@@ -371,8 +324,7 @@ function growtheme_mailchimp_signup() {
         </form>
     <?php
     }
-
-    public function displayTaxSavingForm() {     ?>
+    public function displayTaxSavingForm() { ?>
         <form class="sinup-frm" action="" id="formpost" method="POST" enctype="multipart/form-data">
             <div class="int-fld">
                 <label for="postTitle">Name</label>
@@ -406,8 +358,7 @@ function growtheme_mailchimp_signup() {
         </form>
     <?php
     }
-
-    public function displayDefaultForm() {     ?>
+    public function displayDefaultForm() { ?>
         <form class="sinup-frm" action="" id="formpost" method="POST" enctype="multipart/form-data">
             <div class="input-bx">
                 <label class="rm-font-icn" for="postTitle">&#xe020;</label>
@@ -417,7 +368,6 @@ function growtheme_mailchimp_signup() {
                 <label class="rm-font-icn" for="signupMobile"></label>
                 <input type="text" name="signupMobile" id="signupMobile" placeholder="Mobile No.*">
             </div>
-
             <div class="input-bx">
                 <label class="rm-font-icn" for="signupEmail">&#xe017;</label>
                 <input type="text" name="signupEmail" id="signupEmail" placeholder="Email">
@@ -439,7 +389,6 @@ function growtheme_mailchimp_signup() {
             <input type="hidden" name="campaignId" id="campaignId" value="1932">
             <?php wp_nonce_field( 'front_end_new_post' , 'nonce_field_for_front_end_new_post'); ?>
         </form>
-
     <?php
 	}
 }
