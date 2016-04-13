@@ -27,7 +27,13 @@ class As_Email
 	    // Inquirer variables
 	    $inquirername           = $_POST['postTitle'];
 	    $inquirerEmailId        = $_POST['signupEmail'];
-	    $inquiryContent         = $_POST['postContent'];
+	    if(isset($_POST['postContent'])) {
+	    	$inquiryContent         = $_POST['postContent'];
+	    }
+	    else {
+	    	$inquiryContent = NULL;
+	    }
+
 	    $referralPage           = $_POST['signupRefererral'];
 
 	    $toInquirerEmailSubject        = get_post_meta($campaignId, 'as_campaign_to_inquirer_email_subject', true);

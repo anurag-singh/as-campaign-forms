@@ -4,7 +4,6 @@
 */ ?>
 <?php get_header('campaign-save-tax'); ?>
 
-       
         <div class="alwns-msg">
             <div class="wper">
                 <div class="alwns-bx">
@@ -41,7 +40,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        
+        </div>        
 
     <?php get_footer('campaign-save-tax'); ?>

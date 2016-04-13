@@ -2,7 +2,7 @@
     Template Name:  Free Demat Campaign Page
 
 */ ?>
-    <?php get_header('campaign'); ?>
+    <?php get_header('campaign-compact'); ?>
         <div class="signup-sectn">
             <div class="wper">
                 <div class="bnr-img"><img src="<?php echo get_stylesheet_directory_uri();?>/assets/images/campaign/free-acount.png" align="left" width="100%" class="accut-bnr" />

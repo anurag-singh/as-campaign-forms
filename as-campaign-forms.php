@@ -9,14 +9,14 @@
  * that starts the plugin.
  *
  * @link              www.anuragsingh.me
- * @since             1.1
+ * @since             1.4
  * @package           As_Campaign_Forms
  *
  * @wordpress-plugin
  * Plugin Name:       As Campaign Forms
  * Plugin URI:        www.anuragsingh.me/wp/
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.1
+ * Description:       Google tracking code is removed from form which displayed in campaign landing page
+ * Version:           1.4
  * Author:            Anurag Singh
  * Author URI:        www.anuragsingh.me
  * License:           GPL-2.0+

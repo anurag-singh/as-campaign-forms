@@ -84,9 +84,14 @@ class As_Campaign_Forms_Public {
 		 * class.
 		 */
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/as-campaign-forms-public.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( $this->plugin_name.'_jquery_validate', plugin_dir_url(__FILE__) . 'js/jquery.validate.min.js', array('jquery'), $this->version, true);
-        wp_enqueue_script( $this->plugin_name.'_validation_rules', plugin_dir_url(__FILE__) . 'js/validation-rules.js', array('jquery'), $this->version, true);
-        wp_enqueue_script( $this->plugin_name.'_jquery_lightbox', plugin_dir_url(__FILE__) . 'js/jquery.fancybox.js', array('jquery'), $this->version, true);
+		
+		wp_enqueue_script( $this->plugin_name.'_jquery_validate', plugin_dir_url(__FILE__) . 'js/jquery.validate.min.js', array('jquery'), $this->version, false);
+        wp_enqueue_script( $this->plugin_name.'_validation_rules', plugin_dir_url(__FILE__) . 'js/validation-rules.js', array('jquery'), $this->version, false);
+        wp_enqueue_script( $this->plugin_name.'_jquery_lib', plugin_dir_url(__FILE__) . 'js/jquery-lib.js', array('jquery'), $this->version, false);
+
+        wp_enqueue_script( $this->plugin_name.'_jquery_bxslider', plugin_dir_url(__FILE__) . 'js/jquery.bxslider.js', array('jquery'), $this->version, false);
+
+        //wp_enqueue_script( $this->plugin_name.'_jquery_lightbox', plugin_dir_url(__FILE__) . 'js/jquery.fancybox.js', array('jquery'), $this->version, true);
         //wp_enqueue_script($this->as_campaign, plugin_dir_url(__FILE__) .'as-campaign/public/js/as-campaign.js'));
 	}
 	/**
@@ -106,27 +111,39 @@ class As_Campaign_Forms_Public {
      */
     function override_templates_for_campaign_pages( $template ){
         // Check if its a plugin created page
-        if ( is_page('campaign-mutual-funds') ) {
-            $template = plugin_dir_path( __FILE__ ) .'/partials/page-campaign-mutual-fund.php';
+        // if ( is_page('campaign-mutual-funds') ) {
+        //     $template = plugin_dir_path( __FILE__ ) .'/partials/page-campaign-mutual-fund.php';
+        // }
+        if( is_page('campaign-free-demat')) {
+            $template = plugin_dir_path(__FILE__) . '/partials/page-campaign-free-demat.php';
         }
         if( is_page('campaign-tax-saving-mutual-funds')) {
             $template = plugin_dir_path(__FILE__) . '/partials/page-campaign-save-tax.php';
         }
-        if( is_page('campaign-free-demat')) {
-            $template = plugin_dir_path(__FILE__) . '/partials/page-campaign-free-demat.php';
+        if( is_page('campaign-commodities-trading-account')) {
+            $template = plugin_dir_path(__FILE__) . '/partials/page-campaign-commodities-trading-account.php';
         }
-        if( is_page('campaign-thank-you')) {
-        	$template = plugin_dir_path(__FILE__) . '/partials/page-campaign-thank-you.php';
+        
+        
+        if( is_page('campaign-free-demat-thanks')) {
+        	$template = plugin_dir_path(__FILE__) . '/partials/page-campaign-free-demat-thanks.php';
+        }
+        if( is_page('campaign-tax-saving-mutual-funds-thanks')) {
+        	$template = plugin_dir_path(__FILE__) . '/partials/page-campaign-tax-saving-mutual-funds-thanks.php';
+        }
+        if( is_page('campaign-commodities-trading-account-thanks')) {
+        	$template = plugin_dir_path(__FILE__) . '/partials/page-campaign-commodities-trading-account-thanks.php';
         }
         return $template;
     }
 	function handleSignupForm() {
         //if(('page-campaign.php')) {
-        if ( is_page_template( 'page-templates/page-campaign-free-demat.php' )  ) {
+        if ( is_page('campaign-free-demat') ) {
             if($this->isFormSubmitted() && $this->isNonceSet()) {
                 if($this->isFormValid()) {
                     $this->createPost();
-                    $this->displayfreedematForm();
+                    //$this->displayfreedematForm();
+                    $this->redirect_to_campaign_free_demat_thank_you_page();
                 } else {
                     $this->displayfreedematForm();
                 }
@@ -134,23 +151,13 @@ class As_Campaign_Forms_Public {
                 $this->displayfreedematForm();
             }
         }
-        elseif ( is_page('campaign-mutual-funds')  ) {
+        
+        elseif ( is_page('campaign-tax-saving-mutual-funds') ) {
             if($this->isFormSubmitted() && $this->isNonceSet()) {
                 if($this->isFormValid()) {
                     $this->createPost();
-                    //$this->displaymutualfundForm();
-                } else {
-                    $this->displaymutualfundForm();
-                }
-            } else {
-                $this->displaymutualfundForm();
-            }
-        }
-        elseif ( is_page_template( 'page-templates/page-campaign-save-tax.php' ) ) {
-            if($this->isFormSubmitted() && $this->isNonceSet()) {
-                if($this->isFormValid()) {
-                    $this->createPost();
-                    $this->displayTaxSavingForm();
+                    //$this->displayTaxSavingForm();
+                    $this->redirect_to_campaign_tax_saving_mutual_funds_thank_you_page();
                 } else {
                     $this->displayTaxSavingForm();
                 }
@@ -158,19 +165,32 @@ class As_Campaign_Forms_Public {
                 $this->displayTaxSavingForm();
             }
         }
-        // Load when no condition is true
-        else {
+        elseif ( is_page('campaign-commodities-trading-account') ) {
             if($this->isFormSubmitted() && $this->isNonceSet()) {
                 if($this->isFormValid()) {
                     $this->createPost();
-                    $this->displayDefaultForm();
+                    //$this->displayCommoditiesTradingAccountForm();
+                    $this->redirect_to_campaign_commodities_trading_account_thank_you_page();
                 } else {
-                    $this->displayDefaultForm();
+                    $this->displayCommoditiesTradingAccountForm();
                 }
             } else {
-                $this->displayDefaultForm();
+                $this->displayCommoditiesTradingAccountForm();
             }
         }
+        // Load when no condition is true
+        // else {
+        //     if($this->isFormSubmitted() && $this->isNonceSet()) {
+        //         if($this->isFormValid()) {
+        //             $this->createPost();
+        //             $this->displayDefaultForm();
+        //         } else {
+        //             $this->displayDefaultForm();
+        //         }
+        //     } else {
+        //         $this->displayDefaultForm();
+        //     }
+        // }
     }
     function isFormSubmitted() {
         if( isset( $_POST['submitForm'] ) ) return true;
@@ -204,8 +224,8 @@ class As_Campaign_Forms_Public {
     }
     
 	
-	private function redirect_to_thank_you_page() {
-		$location = home_url("campaign-thank-you");
+	private function redirect_to_campaign_free_demat_thank_you_page() {
+		$location = home_url("campaign-free-demat-thanks");
         ?>
 	   <script type="text/javascript">
 	   <!--
@@ -213,13 +233,42 @@ class As_Campaign_Forms_Public {
 	   //-->
 	   </script>
 	<?php
+	}
 
+	private function redirect_to_campaign_tax_saving_mutual_funds_thank_you_page() {
+		$location = home_url("campaign-tax-saving-mutual-funds-thanks");
+        ?>
+	   <script type="text/javascript">
+	   <!--
+	      window.location= <?php echo "'" . $location . "'"; ?>;
+	   //-->
+	   </script>
+	<?php
+	}
+
+	private function redirect_to_campaign_commodities_trading_account_thank_you_page() {
+		$location = home_url("campaign-commodities-trading-account-thanks");
+        ?>
+	   <script type="text/javascript">
+	   <!--
+	      window.location= <?php echo "'" . $location . "'"; ?>;
+	   //-->
+	   </script>
+	<?php
 	}
 
     function createPost() {
         //Get the details from the form which was posted
         $postTitle = $_POST['postTitle'];
-        $contentOfPost = $_POST['postContent'];
+
+        // Check if postContent is not set in form
+        if (isset($_POST["postContent"])) {
+        	$contentOfPost = $_POST['postContent'];	
+        }
+        else {
+        	$contentOfPost = "N/A";
+        }
+        
         $mobileNo = $_POST['signupMobile'];
         $emailId    =    $_POST['signupEmail'];
         $referralPage = $_POST['signupRefererral'];
@@ -243,9 +292,9 @@ class As_Campaign_Forms_Public {
         $setupEmail = New As_Email();
         $setupEmail->send_email();
         $setupSms = New As_SMS();
-        //$setupSms->send_sms();
+        $setupSms->send_sms();
       
-        $this->redirect_to_thank_you_page();
+        //$this->redirect_to_thank_you_page();
     }
     // public function form_success() {
         // if (createPost()) {
@@ -276,7 +325,7 @@ class As_Campaign_Forms_Public {
             </div>
             <div class="int-fld">
                 <label>&nbsp;</label>
-                <input type="submit" name="submitForm" id="submitForm" value="Submit" class="sbmt-btn" onClick="ga('send', 'event', { eventCategory: 'form', eventAction: 'submitted', eventLabel: 'demat'});">
+                <input type="submit" name="submitForm" id="submitForm" value="Submit" class="sbmt-btn">
             </div>
             <?php
                  // Get the current page URL
@@ -290,40 +339,7 @@ class As_Campaign_Forms_Public {
         </form>
     <?php
     }
-    public function displaymutualfundForm() {?>
-        <form class="sinup-frm" action="" id="formpost" method="POST" enctype="multipart/form-data">
-            <div class="int-fld">
-                <label for="postTitle">Name</label>
-                <input type="text" class="inpts" name="postTitle" id="postTitle" placeholder="Name*">
-            </div>
-            <div class="int-fld">
-                <label for="signupMobile">Mobile</label>
-                <input type="text" class="inpts" name="signupMobile" id="signupMobile" placeholder="Mobile No.*">
-            </div>
-            <div class="int-fld">
-                <label for="signupEmail">Email</label>
-                <input type="text" class="inpts" name="signupEmail" id="signupEmail" placeholder="Email">
-            </div>
-            <div class="int-fld">
-                <label for="postContent">City</label>
-                <input type="text" class="inpts" name="postContent" id="postContent" placeholder="City">
-            </div>
-            <div class="int-fld">
-                <label>&nbsp;</label>
-                <input type="submit" name="submitForm" id="submitForm" value="Submit" class="sbmt-btn" onClick="ga('send', 'event', { eventCategory: 'form', eventAction: 'submitted', eventLabel: 'mutualfunds'});">
-            </div>
-            <?php
-                 // Get the current page URL
-                global $wp;
-                $current_url = home_url(add_query_arg(array(),$wp->request));
-            ?>
-            <input type="hidden" name="signupRefererralUrl" id="signupRefererralUrl" value="<?php echo $current_url; ?>">
-            <input type="hidden" name="signupRefererral" id="signupRefererral" value="<?php echo get_the_title(); ?>">
-            <input type="hidden" name="campaignId" id="campaignId" value="3779">
-            <?php wp_nonce_field( 'front_end_new_post' , 'nonce_field_for_front_end_new_post'); ?>
-        </form>
-    <?php
-    }
+   
     public function displayTaxSavingForm() { ?>
         <form class="sinup-frm" action="" id="formpost" method="POST" enctype="multipart/form-data">
             <div class="int-fld">
@@ -358,26 +374,28 @@ class As_Campaign_Forms_Public {
         </form>
     <?php
     }
-    public function displayDefaultForm() { ?>
+
+    public function displayCommoditiesTradingAccountForm() { ?>
         <form class="sinup-frm" action="" id="formpost" method="POST" enctype="multipart/form-data">
-            <div class="input-bx">
-                <label class="rm-font-icn" for="postTitle">&#xe020;</label>
-                <input type="text" name="postTitle" id="postTitle" placeholder="Name*">
+            <div class="int-fld">
+                <label for="postTitle">Name</label>
+                <input type="text" class="inpts" name="postTitle" id="postTitle" placeholder="Name*">
             </div>
-            <div class="input-bx">
-                <label class="rm-font-icn" for="signupMobile"></label>
-                <input type="text" name="signupMobile" id="signupMobile" placeholder="Mobile No.*">
+            <div class="int-fld">
+                <label for="signupMobile">Mobile</label>
+                <input type="text" class="inpts" name="signupMobile" id="signupMobile" placeholder="Mobile No.*">
             </div>
-            <div class="input-bx">
-                <label class="rm-font-icn" for="signupEmail">&#xe017;</label>
-                <input type="text" name="signupEmail" id="signupEmail" placeholder="Email">
+            <div class="int-fld">
+                <label for="signupEmail">Email</label>
+                <input type="text" class="inpts" name="signupEmail" id="signupEmail" placeholder="Email">
             </div>
-            <div class="input-bx">
-                <label class="rm-font-icn" for="postContent">&#xe03b;</label>
-                <input type="text" name="postContent" id="postContent" placeholder="Tell us more">
-            </div>
-            <div class="input-bx">
-                <input type="submit" name="submitForm" id="submitForm" value="Submit" class="btn">
+            <!-- <div class="int-fld">
+                <label for="postContent">City</label>
+                <input type="text" class="inpts" name="postContent" id="postContent" placeholder="City">
+            </div> -->
+            <div class="int-fld">
+                <label>&nbsp;</label>
+                <input type="submit" name="submitForm" id="submitForm" value="Submit" class="sbmt-btn">
             </div>
             <?php
                  // Get the current page URL
@@ -386,9 +404,13 @@ class As_Campaign_Forms_Public {
             ?>
             <input type="hidden" name="signupRefererralUrl" id="signupRefererralUrl" value="<?php echo $current_url; ?>">
             <input type="hidden" name="signupRefererral" id="signupRefererral" value="<?php echo get_the_title(); ?>">
-            <input type="hidden" name="campaignId" id="campaignId" value="1932">
+            <input type="hidden" name="campaignId" id="campaignId" value="abc">
             <?php wp_nonce_field( 'front_end_new_post' , 'nonce_field_for_front_end_new_post'); ?>
         </form>
     <?php
-	}
+    }
+
+    
+
+ 
 }
